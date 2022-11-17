@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "dependencies": {
+    "chalk": "^5.1.2",
+    "pino-pretty": "^9.1.1"
+  },
+  "version": "0.0.0"
+}
