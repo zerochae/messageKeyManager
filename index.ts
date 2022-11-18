@@ -11,72 +11,100 @@ const username = os.userInfo().username;
 // const originalFilePrefIx = `/Users/${username}/Documents/workspace/wb-front-web-next`;
 const originalFilePrefIx = `/Users/${username}/$path`;
 
-const common = [
-  "locales/en/common.json",
-  "locales/fil/common.json",
-  "locales/in/common.json",
-  "locales/ja/common.json",
-  "locales/ko/common.json",
-  "locales/ms/common.json",
-  "locales/ne/common.json",
-  "locales/th/common.json",
-  "locales/vi/common.json",
-  "locales/zh/common.json",
-  "locales/zh_hant/common.json",
+interface Country {
+  key: string;
+  code: string;
+  flag: string;
+}
+
+const counties: Country[] = [
+  {
+    key: "English",
+    code: "en",
+    flag: "🇺🇸",
+  },
+  {
+    key: "Filipino",
+    code: "fil",
+    flag: "🇵🇭",
+  },
+  {
+    key: "Hindi",
+    code: "in",
+    flag: "🇮🇳",
+  },
+  {
+    key: "Japanese",
+    code: "ja",
+    flag: "🇯🇵",
+  },
+  {
+    key: "Korean",
+    code: "ko",
+    flag: "🇰🇷",
+  },
+  {
+    key: "Malaysia",
+    code: "ms",
+    flag: "🇲🇾",
+  },
+  {
+    key: "Nepali",
+    code: "ms",
+    flag: "🇳🇵",
+  },
+  {
+    key: "Thai",
+    code: "th",
+    flag: "🇹🇭",
+  },
+  {
+    key: "Vietnamese",
+    code: "vi",
+    flag: "🇻🇳",
+  },
+  {
+    key: "Chinese",
+    code: "zh",
+    flag: "🇨🇳",
+  },
+  {
+    key: "Chinese-traditional",
+    code: "zh_hant",
+    flag: "🇨🇳",
+  },
 ];
 
-const meta = [
-  "locales/en/meta.json",
-  "locales/fil/meta.json",
-  "locales/in/meta.json",
-  "locales/ja/meta.json",
-  "locales/ko/meta.json",
-  "locales/ms/meta.json",
-  "locales/ne/meta.json",
-  "locales/th/meta.json",
-  "locales/vi/meta.json",
-  "locales/zh/meta.json",
-  "locales/zh_hant/meta.json",
-];
+const targetPath = (code: string, namespace: string) =>
+  `locales/${code}/${namespace}.json`;
 
-const backup = [
-  "backup/locales/en.json",
-  "backup/locales/fil.json",
-  "backup/locales/in.json",
-  "backup/locales/ja.json",
-  "backup/locales/ko.json",
-  "backup/locales/ms.json",
-  "backup/locales/ne.json",
-  "backup/locales/th.json",
-  "backup/locales/vi.json",
-  "backup/locales/zh.json",
-  "backup/locales/zh_hant.json",
-];
+const backupPath = (code: string) => `backup/locales/${code}.json`;
 
-const make = (key: string, target: string[]) => {
+const make = (key: string, namespace: string) => {
   console.log(chalk.bgBlue("\n::::: copy start ::::: \n"));
 
-  backup.map((locale, index) => {
+  counties.map(({ code, flag }) => {
     const backupData = JSON.parse(
-      fs.readFileSync(`${__dirname}/${locale}`, "utf-8")
+      fs.readFileSync(`${__dirname}/${backupPath(code)}`, "utf-8")
     );
 
-    const language = locale.split(".")[0].split("/")[2];
-
     const realData = JSON.parse(
-      fs.readFileSync(`${originalFilePrefIx}/${target[index]}`, "utf-8")
+      fs.readFileSync(
+        `${originalFilePrefIx}/${targetPath(code, namespace)}`,
+        "utf-8"
+      )
     );
 
     realData[key] = backupData[key];
 
     console.log(
-      `${chalk.yellow(language)} -> { ${chalk.magenta(key)} : ${chalk.cyan(
-        backupData[key]
-      )} }`
+      `${chalk.yellow(` ${flag}   ${code}`)} -> { ${chalk.magenta(
+        key
+      )} : ${chalk.cyan(backupData[key])} }`
     );
 
     fs.writeFileSync(
-      `${originalFilePrefIx}/locales/${language}/meta.json`,
+      `${originalFilePrefIx}/locales/${code}/${namespace}.json`,
       JSON.stringify({ ...realData }, null, 2)
     );
   });
@@ -84,7 +112,7 @@ const make = (key: string, target: string[]) => {
   console.log(chalk.bgBlue("\n::::: copy end :::::\n"));
 };
 
-const key = "label_coupon";
-const namespace: string[] = meta;
+const key = "";
+const namespace = "";
 
 make(key, namespace);
