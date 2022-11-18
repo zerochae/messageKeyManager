@@ -50,7 +50,7 @@ const counties: Country[] = [
   },
   {
     key: "Nepali",
-    code: "ms",
+    code: "ne",
     flag: "🇳🇵",
   },
   {
